@@ -2,7 +2,6 @@
 
 const _ = require('lodash');
 const dotty = require('dotty');
-const traverse = require('traverse');
 const TransformUtil = require('./transform-util');
 
 class JsonMapper {
@@ -29,31 +28,27 @@ class JsonMapper {
    * @returns new JSON object based on the given mapping structure
    */
   map() {
-    // Traverse has a different context
-    const self = this;
-    const replaceWithMappedValue = function (value) {
+    return this._traverseMap(this.mappingObject, value => {
       const valueIsObject = _.isObject(value);
       const valueHasStringSource = valueIsObject && _.isString(value._source || value._sources);
       const valueHasArraySource = valueIsObject && _.isArray(value._source || value._sources);
       if (valueHasStringSource || valueHasArraySource) {
-        this.update(self._mapValue(value));
+        return this._mapValue(value);
       }
-    };
-    // First step: replace all _source tags in parameters/conditions/defaults
-    // This is necessary so the function parameters are resolved, e.g.
-    // { _source: "key1", _transform: { func: [{ _source: "key2" }] } }
-    // In this case _source for key2 has to be replaced before transforming key1
-    // TODO: This only works for nesting of one level,
-    //       ideally the traverse would start on the deepest level (not supported by traverse-js)
-    const keysToResolve = ['_condition', '_conditions', '_transform', '_transforms', '_default'];
-    const mappingObjectWithResolvedParameters = traverse.map(this.mappingObject, function (value) {
-      if (_.intersection(this.path, keysToResolve).length > 0) {
-        replaceWithMappedValue.bind(this)(value);
-      }
+      return value;
     });
-    return traverse.map(mappingObjectWithResolvedParameters, function (value) {
-      replaceWithMappedValue.bind(this)(value);
-    });
+  }
+
+  /**
+   * Traverses an object/array, starting with the deepest values
+   */
+  _traverseMap(value, iterator) {
+    if (_.isArray(value)) {
+      return iterator(value.map(arrayValue => this._traverseMap(arrayValue, iterator)));
+    } else if (_.isObject(value)) {
+      return iterator(_.mapValues(value, objectValue => this._traverseMap(objectValue, iterator)));
+    }
+    return iterator(value);
   }
 
   _mapValue(valueMapping) {

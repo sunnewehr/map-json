@@ -34,7 +34,6 @@
   },
   "dependencies": {
     "dotty": "0.0.2",
-    "lodash": "^4.13.1",
-    "traverse": "^0.6.6"
+    "lodash": "^4.13.1"
   }
 }
