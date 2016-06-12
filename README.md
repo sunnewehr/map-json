@@ -289,8 +289,6 @@ MapJson.map(
 */
 ```
 
-Note: When multiple conditions are met, the first `_transform` will be used. Mixing of non-conditional and conditional transforms is not allowed.
-
 ### Preprocess values
 
 It is possible to preprocess all mapped values, e.g. for type conversions:
