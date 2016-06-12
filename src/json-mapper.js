@@ -55,8 +55,7 @@ class JsonMapper {
     const conditionFunctions = valueMapping._condition || valueMapping._conditions;
     const defaultValue = valueMapping._default;
     const sourceValues = this._resolveSource(valueMapping._source || valueMapping._sources);
-    const transformFunctions = this.transformUtil.resolveTransformConditions(sourceValues,
-      valueMapping._transform || valueMapping._transforms);
+    const transformFunctions = valueMapping._transform || valueMapping._transforms;
 
     // Condition not met -> ignore transforms and return default immediately
     if (conditionFunctions && !this.transformUtil.checkCondition(sourceValues,

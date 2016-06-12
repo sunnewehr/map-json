@@ -28,46 +28,6 @@ class TransformUtil {
   }
 
   /**
-   * Checks conditional transform functions
-   *
-   * @param sources value(s) passed to the condition functions (_source)
-   * @param transformFunctionObject function objects with or without conditions, e.g.
-   *        With conditions:        [
-   *                                  { _condition: { someCondition1: [] } }, _transform: [...] }
-   *                                  { _condition: { someCondition2: [] } }, _transform: [...] }
-   *                                ]
-   *        Without conditions:     [
-   *                                  { transform1: [] }
-   *                                  { transform2: [] }
-   *                                ]
-   * @returns resolved transforms (for conditional transforms, the first match is returned)
-   */
-  resolveTransformConditions(sources, transformFunctionObject) {
-    const transformFunctionObjects = [].concat(transformFunctionObject || []);
-    const conditionalTransforms = transformFunctionObjects.filter(
-      functionObject => !_.isUndefined(functionObject._condition));
-    const normalTransforms = _.difference(transformFunctionObject, conditionalTransforms);
-    if (conditionalTransforms.length > 0 && normalTransforms.length > 0) {
-      /**
-       * The following is not allowed (mixing of conditional and normal transforms)
-       * [
-       * { _condition: { someCondition1: [] } }, _transform: [...] },
-       * { [{ transform1: [] }, { transform2: [] }] }
-       * ]
-       */
-      throw new Error('Mixing of conditional transforms and normal transforms not allowed');
-    }
-    if (conditionalTransforms.length === 0) {
-      return transformFunctionObjects;
-    }
-    // If multiple conditions are met, the first will be used
-    return conditionalTransforms.map(functionObject => {
-      const conditionMet = this.checkCondition(sources, functionObject._condition);
-      return conditionMet ? functionObject._transform : undefined;
-    }).filter(functionObject => functionObject !== undefined)[0];
-  }
-
-  /**
    * Transforms given value using the passed transform function objects
    */
   transformValue(value, transformFunctionObjects) {

@@ -242,7 +242,7 @@ MapJson.map(
 */
 ```
 
-### Conditional transforms
+### Nested mappings and conditional transforms
 
 ```javascript
 MapJson.map(
@@ -250,28 +250,33 @@ MapJson.map(
 {
   fruits: {
     apple: {
-      name: 'apple'
+      name: 'Apple',
+      id: 123
     }
   }
 },
 // Mapping object
 {
   fruitName: {
-    _source: 'fruits.apple.name',
-    _transform: [
-      {
+    // Source must always be defined to trigger mapping
+    _source: '*',
+    _transform: {
+      "@chooseDefined": [{
+        _source: 'fruits.apple.name',
         _condition: { falseCondition: [] },
         _transform: { toLowerCase: [] }
-      },
-      {
-        _condition: { trueCondition: [] },
+      }, {
+        _source: 'fruits.apple.name',
+        _condition: { "@isEqual": [{ _source: 'fruits.apple.id' }, 123]},
         _transform: { toUpperCase: [] }
-      }
-    ]
+      }] 
+    }
   }
 },
 // Transform / condition functions
 {
+  chooseDefined: (param1, param2) => param1 || param2,
+  isEqual: (param1, param2) => param1 === param2,
   falseCondition: () => false,
   trueCondition: () => true,
   toLowerCase: value => value.toLowerCase(),
