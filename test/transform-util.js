@@ -95,6 +95,11 @@ describe('TransformUtil', function () {
     expect(transformUtil.transformValue({}, returnTrue, transformSource)).to.equal(false);
   });
 
+  it('should not pass value when function is prefixed with @', function () {
+    const add = { '@add': [10, 10] };
+    expect(transformUtil.transformValue(1, add, transformSource)).to.equal(20);
+  });
+
   it('should run multiple transform functions', function () {
     const transforms = [
       { add: [1] },

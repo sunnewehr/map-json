@@ -96,24 +96,40 @@ class TransformUtil {
     // { functionName: ['param1', 'param2'] }
     let functionName = Object.keys(functionObject)[0];
     const parameters = functionObject[functionName];
-    // Check if function is inversed (starts with !)
-    const isInversed = TransformUtil._checkInverseFunction(functionName).isInversed;
-    functionName = TransformUtil._checkInverseFunction(functionName).functionName;
+    const prefix = TransformUtil._checkFunctionPrefix(functionName);
+    functionName = prefix.functionNameWithoutPrefix;
     // Transform functions are called with the transform source as their context
     // parameters: (previousTransformValue, param1, param2, ...)
-    const transformedValue = this.transformSource[functionName].apply(
-      this.transformSource, ([inputValue].concat(parameters)));
+    // @ causes the first parameter to be left out: (param1, param2)
+    const allParameters = [inputValue].concat(parameters);
+    const transformedValue = this.transformSource[functionName].apply(this.transformSource,
+      prefix.isAt ? _.slice(allParameters, 1) : allParameters);
     // Inverse only applies when booleans are returned
-    const shouldInverseTransformedValue = isInversed && _.isBoolean(transformedValue);
+    const shouldInverseTransformedValue = prefix.isInversed && _.isBoolean(transformedValue);
     return shouldInverseTransformedValue ? !transformedValue : transformedValue;
   }
 
-  static _checkInverseFunction(functionName) {
-    if (functionName.startsWith('!')) {
+
+  /**
+   * "@function" can be used to override the first parameter of a transform function / condition
+   * "!function" can be used to invert a boolean result
+   */
+  static _checkFunctionPrefix(functionName) {
+    let functionNameWithoutPrefix = functionName;
+    let isAt = false;
+    let isInversed = false;
+    // Check if functionName starts with @ or !@
+    if ((/^(@|!@)/).test(functionName)) {
+      isAt = true;
       // Note: replace only replaces first occurrence
-      return { isInversed: true, functionName: functionName.replace('!', '') };
+      functionNameWithoutPrefix = functionNameWithoutPrefix.replace('@', '');
     }
-    return { isInversed: false, functionName };
+    // Check if functionName starts with ! or @!
+    if ((/^(!|@!)/).test(functionName)) {
+      isInversed = true;
+      functionNameWithoutPrefix = functionNameWithoutPrefix.replace('!', '');
+    }
+    return { isAt, isInversed, functionNameWithoutPrefix };
   }
 }
 

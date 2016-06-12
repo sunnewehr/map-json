@@ -12,7 +12,7 @@ const transformSource = {
   fail: () => {
     throw new Error('forced fail');
   },
-  isEqual: (input, parameter1, parameter2) => parameter1 === parameter2,
+  isEqual: (input, parameter) => input === parameter,
   returnTrue: () => true,
   returnFalse: () => false
 };
@@ -271,7 +271,23 @@ describe('JsonMapper', function () {
     const mapping = {
       target: {
         _source: 'simpleKey',
-        _condition: { isEqual: [{ _source: 'key2.object.number' }, 2] }
+        _condition: { isEqual: [{ _source: 'simpleKey' }] }
+      }
+    };
+    expect(JsonMapper.map(testSource, mapping, transformSource).target).to.deep.equal(
+      'simple');
+  });
+
+  it('should only map when condition is met (with parameters and prefixes)', function () {
+    const mapping = {
+      target: {
+        _source: 'simpleKey',
+        _condition: [
+          { '!isEqual': [123] },
+          { '!@isEqual': [3, 2] },
+          { '@!isEqual': [3, 2] },
+          { isEqual: ['simple'] }
+        ]
       }
     };
     expect(JsonMapper.map(testSource, mapping, transformSource).target).to.deep.equal(
