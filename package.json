@@ -9,17 +9,28 @@
   "bugs": "https://github.com/sunnewehr/map-json/issues",
   "main": "src/json-mapper.js",
   "description": "Maps objects into a given JSON structure",
-  "keywords": ["map", "mapper", "transform", "transformer", "schema", "template", "json", "object"],
+  "keywords": [
+    "map",
+    "mapper",
+    "transform",
+    "transformer",
+    "schema",
+    "template",
+    "json",
+    "object"
+  ],
   "license": "MIT",
   "scripts": {
     "test": "mocha --recursive test/"
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "coveralls": "^2.11.9",
     "eslint": "^2.12.0",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.8.1",
-    "mocha": "^2.5.3"
+    "mocha": "^2.5.3",
+    "mocha-lcov-reporter": "^1.2.0"
   },
   "dependencies": {
     "dotty": "0.0.2",
