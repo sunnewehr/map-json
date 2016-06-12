@@ -1,8 +1,8 @@
+# map-json
+
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 ![issues](https://img.shields.io/github/issues/sunnewehr/map-json.svg)
 [![Coverage Status](https://coveralls.io/repos/github/sunnewehr/map-json/badge.svg?branch=master)](https://coveralls.io/github/sunnewehr/map-json?branch=master)
-
-# map-json
 
 Library to map objects into a given JSON structure
 
