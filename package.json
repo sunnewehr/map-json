@@ -5,8 +5,11 @@
     "name": "Sven Unnewehr",
     "email": "sven@unnewehr.me"
   },
+  "homepage": "https://github.com/sunnewehr/map-json",
+  "bugs": "https://github.com/sunnewehr/map-json/issues",
   "main": "src/json-mapper.js",
   "description": "Maps objects into a given JSON structure",
+  "keywords": ["map", "mapper", "transform", "transformer", "schema", "template", "json", "object"],
   "license": "MIT",
   "scripts": {
     "test": "mocha --recursive test/"
