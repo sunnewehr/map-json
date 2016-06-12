@@ -21,7 +21,6 @@ class JsonMapper {
     }
     this.sourceObject = sourceObject;
     this.mappingObject = mappingObject;
-    this.transformSource = transformSource || {};
     this.preProcess = preProcess;
     this.transformUtil = new TransformUtil(transformSource);
   }

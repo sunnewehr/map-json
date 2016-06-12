@@ -26,11 +26,11 @@ The mapping object defines the structure of the created JSON object. All objects
 
 ```javascript
 {
-  name: "John", // This will be kept as is
+  name: 'John', // This will be kept as is
   data: {
     id: 123, // This will be kept as is
     username: {
-      _source: "john.username" // will be replaced with the respective value from the source object
+      _source: 'john.username' // will be replaced with the respective value from the source object
     }
   }
 }
@@ -41,7 +41,7 @@ Example source object
 ```javascript
 {
   john: {
-    username: "johndoe"
+    username: 'johndoe'
   }
 }
 ```
@@ -52,10 +52,10 @@ Mapping
 MapJson.map(sourceObject, mappingObject);
 /*
 {
-  name: "John",
+  name: 'John',
   data: {
     id: 123,
-    username: "johndoe"
+    username: 'johndoe'
   }
 }
 */
@@ -70,17 +70,17 @@ MapJson.map(
 // Source
 {
   users: [
-    { name: "John" },
-    { name: "Peter" }
+    { name: 'John' },
+    { name: 'Peter' }
   ]
 },
 // Mapping object
 {
   usernames: {
-    _source: "users.*.name"
+    _source: 'users.*.name'
   },
   firstUser: {
-    _source: "*.0.name"
+    _source: '*.0.name'
   }
 });
 /*
@@ -102,13 +102,13 @@ MapJson.map(
 // Mapping object
 {
   fruit: {
-    _source: "fruits.apple.name",
-    _default: "apple"
+    _source: 'fruits.apple.name',
+    _default: 'apple'
   }
 });
 /*
 {
-  fruit: "apple"
+  fruit: 'apple'
 }
 */
 ```
@@ -123,14 +123,14 @@ MapJson.map(
 {
   fruits: {
     apple: {
-      name: "apple"
+      name: 'apple'
     }
   }
 },
 // Mapping object
 {
   fruit: {
-    _source: "fruits.apple.name",
+    _source: 'fruits.apple.name',
     // toUpperCase is a reference to the function in the third parameter (see below)
     // The array represents the parameters passed to the transform function (see next example)
     _transform: { toUpperCase: [] }
@@ -142,7 +142,7 @@ MapJson.map(
 });
 /*
 {
-  fruit: "APPLE"
+  fruit: 'APPLE'
 }
 */
 ```
@@ -155,7 +155,7 @@ MapJson.map(
 {
   fruits: {
     apple: {
-      name: "apple",
+      name: 'apple',
       id: 123
     }
   }
@@ -163,12 +163,12 @@ MapJson.map(
 // Mapping object
 {
   fruit: {
-    _source: "fruits.apple.name",
+    _source: 'fruits.apple.name',
     _transform: [
       { toUpperCase: [] },
-      { append: ["_"] },
+      { append: ['_'] },
       // Parameters can also be referenced values
-      { append: [ { _source: "fruits.apple.id" } ] }
+      { append: [ { _source: 'fruits.apple.id' } ] }
     ]
   }
 },
@@ -179,7 +179,7 @@ MapJson.map(
 });
 /*
 {
-  fruit: "APPLE_123"
+  fruit: 'APPLE_123'
 }
 */
 ```
@@ -194,36 +194,36 @@ MapJson.map(
 {
   fruits: {
     apple: {
-      name: "apple",
+      name: 'apple',
       id: 123
     },
     banana: {
-      name: "banana"
+      name: 'banana'
     }
   }
 },
 // Mapping object
 {
   fruitName: {
-    _source: "fruits.apple.name",
+    _source: 'fruits.apple.name',
     _condition: { trueCondition: [] }
   },
   fruitId: {
-    _source: "fruits.apple.name",
+    _source: 'fruits.apple.name',
     // All conditions have to be met
     _condition: [{ trueCondition: [] }, { falseCondition: [] }],
     // When the condition is false, the default value will be used
     _default: 0
   },
   otherFruit: {
-    _source: "fruits.banana.name",
+    _source: 'fruits.banana.name',
     _condition: [
       // Conditions can also be inverted
-      { "!falseCondition": [] },
+      { '!falseCondition': [] },
       // The input value is passed as the first parameter
-      { "equal": ["banana"] },
-      // Conditions with "@" override the input value
-      { "@equal": [10, 10] }
+      { 'equal': ['banana'] },
+      // Conditions with '@' override the input value
+      { '@equal': [10, 10] }
     ]
   }
 },
@@ -235,9 +235,9 @@ MapJson.map(
 });
 /*
 {
-  fruitName: "apple",
+  fruitName: 'apple',
   fruitId: 0,
-  otherFruit: "banana"
+  otherFruit: 'banana'
 }
 */
 ```
@@ -250,14 +250,14 @@ MapJson.map(
 {
   fruits: {
     apple: {
-      name: "apple"
+      name: 'apple'
     }
   }
 },
 // Mapping object
 {
   fruitName: {
-    _source: "fruits.apple.name",
+    _source: 'fruits.apple.name',
     _transform: [
       {
         _condition: { falseCondition: [] },
@@ -279,7 +279,7 @@ MapJson.map(
 });
 /*
 {
-  fruitName: "APPLE"
+  fruitName: 'APPLE'
 }
 */
 ```
@@ -299,7 +299,7 @@ MapJson.map(
 // Mapping object
 {
   id: {
-    _source: "userId"
+    _source: 'userId'
   },
 },
 // Transform / condition functions
@@ -309,7 +309,7 @@ value => value.toString()
 );
 /*
 {
-  userId: "123"
+  userId: '123'
 }
 */
 ```
