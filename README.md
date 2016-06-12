@@ -217,12 +217,19 @@ MapJson.map(
   },
   otherFruit: {
     _source: "fruits.banana.name",
-    // Conditions can also be inverted
-    _condition: { "!falseCondition": [] }
+    _condition: [
+      // Conditions can also be inverted
+      { "!falseCondition": [] },
+      // The input value is passed as the first parameter
+      { "equal": ["banana"] },
+      // Conditions with "@" override the input value
+      { "@equal": [10, 10] }
+    ]
   }
 },
 // Transform / condition functions
 {
+  equal: (value, parameter) => value === parameter,
   falseCondition: () => false,
   trueCondition: () => true
 });
