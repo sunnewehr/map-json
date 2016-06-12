@@ -1,0 +1,32 @@
+{
+  "simpleKey": "simple",
+  "key1": {
+    "array": [{
+      "number": 1
+    }, {
+      "number": 2
+    }, {
+      "number": 3
+    }]
+  },
+  "key2": {
+    "object": {
+      "number": 2,
+      "array": [{
+        "deepArray": [{
+          "arrayInArray": [
+            { "deepObject": { "string": "value1" } },
+            { "deepObject": { "string": "value2" } },
+            { "deepObject": { "string": "value3" } }
+          ]
+        }, {
+          "arrayInArray": [
+            { "deepObject": { "string": "value4" } },
+            { "deepObject": { "string": "value5" } },
+            { "deepObject": { "string": "value6" } }
+          ]
+        }]
+      }]
+    }
+  }
+}

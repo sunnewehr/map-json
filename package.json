@@ -1,0 +1,27 @@
+{
+  "name": "map-json",
+  "version": "0.1.0",
+  "author": {
+    "name": "Sven Unnewehr",
+    "email": "sven@unnewehr.me"
+  },
+  "main": "src/json-mapper.js",
+  "description": "Maps objects into a given JSON structure",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha --recursive test/"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "eslint": "^2.12.0",
+    "eslint-config-airbnb": "^9.0.1",
+    "eslint-plugin-import": "^1.8.1",
+    "mocha": "^2.5.3"
+  },
+  "dependencies": {
+    "dotty": "0.0.2",
+    "lodash": "^4.13.1",
+    "traverse": "^0.6.6",
+    "winston": "^2.2.0"
+  }
+}
