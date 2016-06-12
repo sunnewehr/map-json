@@ -1,7 +1,6 @@
 'use strict';
 
 const _ = require('lodash');
-const logger = require('winston');
 
 class TransformUtil {
   constructor(transformSource) {
@@ -22,7 +21,7 @@ class TransformUtil {
       try {
         return this._runFunction(conditionFunctionObject, sources);
       } catch (error) {
-        logger.warn(`Condition (${conditionFunctionName}): ${error.message}`);
+        console.warn(`Condition (${conditionFunctionName}): ${error.message}`);
         return false;
       }
     }).every(conditionResult => conditionResult === true);
@@ -83,7 +82,7 @@ class TransformUtil {
         }
       });
     } catch (error) {
-      logger.warn(error.message);
+      console.warn(error.message);
       // On any error, undefined is returned (this causes the default value to be used)
       transformedValue = undefined;
     }
