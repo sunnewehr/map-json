@@ -43,10 +43,11 @@ class JsonMapper {
     // This is necessary so the function parameters are resolved, e.g.
     // { _source: "key1", _transform: { func: [{ _source: "key2" }] } }
     // In this case _source for key2 has to be replaced before transforming key1
+    // TODO: This only works for nesting of one level,
+    //       ideally the traverse would start on the deepest level (not supported by traverse-js)
+    const keysToResolve = ['_condition', '_conditions', '_transform', '_transforms', '_default'];
     const mappingObjectWithResolvedParameters = traverse.map(this.mappingObject, function (value) {
-      if (this.path.indexOf('_condition') !== -1 || this.path.indexOf('_conditions') !== -1 ||
-        this.path.indexOf('_transform') !== -1 || this.path.indexOf('_transforms') !== -1 ||
-        this.path.indexOf('_default') !== -1) {
+      if (_.intersection(this.path, keysToResolve).length > 0) {
         replaceWithMappedValue.bind(this)(value);
       }
     });
@@ -99,7 +100,7 @@ class JsonMapper {
   }
 
   _resolveKeyPath(keyPath) {
-    // Use dotty.search is the path contains wildcards
+    // Use dotty.search if the path contains wildcards
     if (keyPath.indexOf('*') !== -1) {
       const result = dotty
         .search(this.sourceObject, keyPath)
