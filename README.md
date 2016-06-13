@@ -261,13 +261,13 @@ MapJson.map(
     // Source must always be defined to trigger mapping
     _source: '*',
     _transform: {
-      "@chooseDefined": [{
+      '@chooseDefined': [{
         _source: 'fruits.apple.name',
         _condition: { falseCondition: [] },
         _transform: { toLowerCase: [] }
       }, {
         _source: 'fruits.apple.name',
-        _condition: { "@isEqual": [{ _source: 'fruits.apple.id' }, 123]},
+        _condition: { '@isEqual': [{ _source: 'fruits.apple.id' }, 123] },
         _transform: { toUpperCase: [] }
       }] 
     }
