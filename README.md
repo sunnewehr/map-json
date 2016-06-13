@@ -24,6 +24,8 @@ $ npm install map-json
 
 The mapping object defines the structure of the created JSON object. All objects that contain a `_source` tag will be replaced with its respective data from the source object.
 
+Example mapping object:
+
 ```javascript
 {
   name: 'John', // This will be kept as is
@@ -36,7 +38,7 @@ The mapping object defines the structure of the created JSON object. All objects
 }
 ```
 
-Example source object
+Example source object:
 
 ```javascript
 {
@@ -46,9 +48,10 @@ Example source object
 }
 ```
 
-Mapping
+Mapping:
 
 ```javascript
+// Using the objects defined above
 MapJson.map(sourceObject, mappingObject);
 /*
 {
@@ -76,12 +79,8 @@ MapJson.map(
 },
 // Mapping object
 {
-  usernames: {
-    _source: 'users.*.name'
-  },
-  firstUser: {
-    _source: '*.0.name'
-  }
+  usernames: { _source: 'users.*.name' },
+  firstUser: { _source: '*.0.name' }
 });
 /*
 {
@@ -93,7 +92,7 @@ MapJson.map(
 
 ### Default values
 
-`_default` can be used to return default values when the referenced value is not defined in the source object
+`_default` can be used to return default values when the referenced value is not defined in the source object:
 
 ```javascript
 MapJson.map(
@@ -115,7 +114,7 @@ MapJson.map(
 
 ### Transform functions
 
-By defining `_transform`, values can be processed by one or more transform functions.
+By defining `_transform`, values can be processed by one or more transform functions:
 
 ```javascript
 MapJson.map(
@@ -147,7 +146,7 @@ MapJson.map(
 */
 ```
 
-It is also possible to pass parameters to transform functions and chain them:
+It is also possible to pass parameters to transform functions or chain them:
 
 ```javascript
 MapJson.map(
@@ -186,7 +185,7 @@ MapJson.map(
 
 ### Conditions
 
-`_condition` can be used to only map values when a certain condition is met. The syntax is identical to transform functions.
+`_condition` can be used to only map values when a certain condition is met. The syntax is identical to transform functions. However, instead of the result of the previous function, each transform function always receives the source(s) as the first parameter.
 
 ```javascript
 MapJson.map(
@@ -261,7 +260,7 @@ MapJson.map(
     // Source must always be defined to trigger mapping
     _source: '*',
     _transform: {
-      '@chooseDefined': [{
+      '@returnDefined': [{
         _source: 'fruits.apple.name',
         _condition: { falseCondition: [] },
         _transform: { toLowerCase: [] }
@@ -275,7 +274,7 @@ MapJson.map(
 },
 // Transform / condition functions
 {
-  chooseDefined: (param1, param2) => param1 || param2,
+  returnDefined: (param1, param2) => param1 || param2,
   isEqual: (param1, param2) => param1 === param2,
   falseCondition: () => false,
   trueCondition: () => true,
@@ -291,32 +290,9 @@ MapJson.map(
 
 ### Transform each
 
-```javascript
-MapJson.map(
-// Source
-{
-  fruits: ['Apple', 'Banana']
-},
-// Mapping object
-{
-  fruits: {
-    _source: 'fruits',
-    _transformEach: { toUpperCase: [] }
-  },
-},
-// Transform / condition functions
-{
-  toUpperCase: value => value.toUpperCase()
-}
-);
-/*
-{
-  fruits: ['APPLE', 'BANANA']
-}
-*/
-```
+Instead of `_transform`, it is also possible to use `_transformEach`. If the source (or pre-process) resolves to an array, `_transformEach` is executed separately for each array value. Note: When `_transform` and `_transformEach` are defined, `_transform` is executed first.
 
-Example of a more advanced mapping with partial array transformation:
+Example of a more advanced mapping with partial array transformation and use of `_transformEach`:
 
 ```javascript
 MapJson.map(
@@ -337,7 +313,7 @@ MapJson.map(
   fruits: {
     _source: '*',
     _transform: {
-      "@toObjectArray": [{
+      '@toObjectArray': [{
         fruitName: { _source: 'fruits.*.name', _transformEach: { toUpperCase: [] } },
         fruitId: { _source: 'fruits.*.id' },
         fruitColor: { _source: 'fruits.*.color', _transformEach: { substr: [0, 1] } },
@@ -372,9 +348,9 @@ MapJson.map(
 */
 ```
 
-### Preprocess values
+### Pre-process function
 
-It is possible to preprocess all mapped values, e.g. for type conversions:
+It is possible to pre-process all mapped values, e.g., for type conversions:
 
 ```javascript
 MapJson.map(
@@ -399,3 +375,9 @@ value => value.toString()
 }
 */
 ```
+
+Note: When using multiple sources, each source is pre-processed separately. However, when a source resolves to an array, the pre-process function will receive the complete array, not separate values.
+
+## License
+
+  [MIT](LICENSE)
