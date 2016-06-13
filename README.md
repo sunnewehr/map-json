@@ -209,7 +209,7 @@ MapJson.map(
     _condition: { trueCondition: [] }
   },
   fruitId: {
-    _source: 'fruits.apple.name',
+    _source: 'fruits.apple.id',
     // All conditions have to be met
     _condition: [{ trueCondition: [] }, { falseCondition: [] }],
     // When the condition is false, the default value will be used
@@ -261,13 +261,13 @@ MapJson.map(
     // Source must always be defined to trigger mapping
     _source: '*',
     _transform: {
-      "@chooseDefined": [{
+      '@chooseDefined': [{
         _source: 'fruits.apple.name',
         _condition: { falseCondition: [] },
         _transform: { toLowerCase: [] }
       }, {
         _source: 'fruits.apple.name',
-        _condition: { "@isEqual": [{ _source: 'fruits.apple.id' }, 123]},
+        _condition: { '@isEqual': [{ _source: 'fruits.apple.id' }, 123] },
         _transform: { toUpperCase: [] }
       }] 
     }
@@ -299,7 +299,7 @@ MapJson.map(
 },
 // Mapping object
 {
-  id: {
+  fruits: {
     _source: 'fruits',
     _transformEach: { toUpperCase: [] }
   },
