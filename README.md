@@ -316,6 +316,62 @@ MapJson.map(
 */
 ```
 
+Example of a more advanced mapping with partial array transformation:
+
+```javascript
+MapJson.map(
+// Source
+{
+  fruits: [{
+    name: 'Apple',
+    id: 1,
+    color: 'red'
+  }, {
+    name: 'Lemon',
+    id: 2,
+    color: 'yellow'
+  }]
+},
+// Mapping object
+{
+  fruits: {
+    _source: '*',
+    _transform: {
+      "@toObjectArray": [{
+        fruitName: { _source: 'fruits.*.name', _transformEach: { toUpperCase: [] } },
+        fruitId: { _source: 'fruits.*.id' },
+        fruitColor: { _source: 'fruits.*.color', _transformEach: { substr: [0, 1] } },
+      }]
+    }
+  },
+},
+// Transform / condition functions
+{
+  toUpperCase: value => value.toUpperCase(),
+  substr: (string, from, length) => string.substr(from, length),
+  toObjectArray: inputObject => {
+    // Uses lodash
+    const createObjectByIndex = index => _.mapValues(inputObject, array => array[index]);
+    const firstObjectValues = _.values(inputObject)[0] || [];
+    return _.times(firstObjectValues.length, createObjectByIndex);
+  }
+}
+);
+/*
+{
+  fruits: [{
+    fruitColor: 'r'
+    fruitId: 1
+    fruitName: 'APPLE'
+  }, {
+    fruitColor: 'y'
+    fruitId: 2
+    fruitName: 'LEMON'
+  }]
+}
+*/
+```
+
 ### Preprocess values
 
 It is possible to preprocess all mapped values, e.g. for type conversions:
