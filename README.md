@@ -209,7 +209,7 @@ MapJson.map(
     _condition: { trueCondition: [] }
   },
   fruitId: {
-    _source: 'fruits.apple.name',
+    _source: 'fruits.apple.id',
     // All conditions have to be met
     _condition: [{ trueCondition: [] }, { falseCondition: [] }],
     // When the condition is false, the default value will be used
@@ -299,7 +299,7 @@ MapJson.map(
 },
 // Mapping object
 {
-  id: {
+  fruits: {
     _source: 'fruits',
     _transformEach: { toUpperCase: [] }
   },
