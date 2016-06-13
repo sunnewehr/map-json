@@ -45,6 +45,17 @@ describe('JsonMapper', function () {
     expect(JsonMapper.map(testSource, mapping, null, preProcess).target).to.equal('simplex');
   });
 
+  it('should map and preprocess single array source', function () {
+    const mapping = {
+      target: {
+        _source: 'key1.array.*.number'
+      }
+    };
+    const preProcess = value => value.concat(4);
+    expect(JsonMapper.map(testSource, mapping, null, preProcess).target)
+      .to.deep.equal([1, 2, 3, 4]);
+  });
+
   it('should proprocess multiple sources', function () {
     const mapping = {
       target: {
@@ -117,7 +128,9 @@ describe('JsonMapper', function () {
         _source: ['simpleKey', 'notDefined', 'key2.object.number']
       }
     };
-    expect(JsonMapper.map(testSource, mapping).target).to.deep.equal(['simple', undefined, 4]);
+    expect(JsonMapper.map(testSource, mapping).target).to.deep.equal(['simple', undefined,
+      4
+    ]);
   });
 
   it('should map multiple sources to undefined when all are undefiend', function () {
@@ -176,7 +189,8 @@ describe('JsonMapper', function () {
         _transform: { addX: [] }
       }
     };
-    expect(JsonMapper.map(testSource, mapping, transformSource).target).to.deep.equal('simplex');
+    expect(JsonMapper.map(testSource, mapping, transformSource).target).to.deep.equal(
+      'simplex');
   });
 
   it('should transform mapped value with multiple parameters', function () {
@@ -186,7 +200,8 @@ describe('JsonMapper', function () {
         _transform: { add: ['x', 'y'] }
       }
     };
-    expect(JsonMapper.map(testSource, mapping, transformSource).target).to.deep.equal('simplexy');
+    expect(JsonMapper.map(testSource, mapping, transformSource).target).to.deep.equal(
+      'simplexy');
   });
 
   it('should transform mapped value with multiple mapped parameters', function () {
@@ -196,7 +211,8 @@ describe('JsonMapper', function () {
         _transform: { add: [{ _source: 'key2.object.number' }, { _source: 'key1.array.0.number' }] }
       }
     };
-    expect(JsonMapper.map(testSource, mapping, transformSource).target).to.deep.equal('simple41');
+    expect(JsonMapper.map(testSource, mapping, transformSource).target).to.deep.equal(
+      'simple41');
   });
 
   it('should transform mapped value with multiple transform functions and parameters', function () {
@@ -220,7 +236,8 @@ describe('JsonMapper', function () {
         _source: ['simpleKey'],
         _transform: [
           { add: [{ _source: 'key2.object.number' }, { _source: 'key1.array.0.number' }] },
-          { add: [{ _source: 'simpleKey' }, { _source: 'key1.array.1.number' }]
+          {
+            add: [{ _source: 'simpleKey' }, { _source: 'key1.array.1.number' }]
           }
         ]
       }

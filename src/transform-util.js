@@ -17,6 +17,7 @@ class TransformUtil {
    */
   checkCondition(sources, conditionFunctionObjects) {
     return [].concat(conditionFunctionObjects).map(conditionFunctionObject => {
+      // Syntax: { functionName: ['param1', 'param2'] }
       const conditionFunctionName = Object.keys(conditionFunctionObject)[0];
       try {
         return this._runFunction(conditionFunctionObject, sources);
@@ -34,6 +35,7 @@ class TransformUtil {
     let transformedValue = value;
     try {
       [].concat(transformFunctionObjects).forEach(transformFunctionObject => {
+        // Syntax: { functionName: ['param1', 'param2'] }
         const transformFunctionName = Object.keys(transformFunctionObject)[0];
         try {
           transformedValue = this._runFunction(transformFunctionObject, transformedValue);
@@ -53,7 +55,7 @@ class TransformUtil {
    * Runs the given transform function object
    */
   _runFunction(functionObject, inputValue) {
-    // { functionName: ['param1', 'param2'] }
+    // Syntax: { functionName: ['param1', 'param2'] }
     let functionName = Object.keys(functionObject)[0];
     const parameters = functionObject[functionName];
     const prefix = TransformUtil._checkFunctionPrefix(functionName);

@@ -54,23 +54,24 @@ class JsonMapper {
   _mapValue(valueMapping) {
     const conditionFunctions = valueMapping._condition || valueMapping._conditions;
     const defaultValue = valueMapping._default;
-    const sourceValues = this._resolveSource(valueMapping._source || valueMapping._sources);
+    const sourcesValues = valueMapping._source || valueMapping._sources;
+    const resolvedSourceValues = this._resolveSource(sourcesValues);
     const transformFunctions = valueMapping._transform || valueMapping._transforms;
     const transformEachFunction = valueMapping._transformEach;
 
     // Condition not met -> ignore transforms and return default immediately
-    if (conditionFunctions && !this.transformUtil.checkCondition(sourceValues,
+    if (conditionFunctions && !this.transformUtil.checkCondition(resolvedSourceValues,
         conditionFunctions)) {
       return defaultValue;
     }
 
-    let mappedValue = sourceValues;
+    let mappedValue = resolvedSourceValues;
     if (_.isFunction(this.preProcess)) {
       // For multiple source values, preprocess all independently
-      if (_.isArray(sourceValues)) {
-        mappedValue = sourceValues.map(sourceValue => this.preProcess(sourceValue));
+      if (_.isArray(sourcesValues)) {
+        mappedValue = resolvedSourceValues.map(sourceValue => this.preProcess(sourceValue));
       } else {
-        mappedValue = this.preProcess(sourceValues);
+        mappedValue = this.preProcess(resolvedSourceValues);
       }
     }
     // If source value (or preprocessed value) is undefined, ignore transforms
