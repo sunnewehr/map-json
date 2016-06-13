@@ -229,6 +229,20 @@ describe('JsonMapper', function () {
       'simple41simple2');
   });
 
+  it('should transform source array with transformEach', function () {
+    const mapping = {
+      target: {
+        _source: 'key1.array.*.number',
+        _transformEach: [
+          { addX: [] },
+          { addX: [] }
+        ]
+      }
+    };
+    expect(JsonMapper.map(testSource, mapping, transformSource).target).to.deep.equal(
+      ['1xx', '2xx', '3xx']);
+  });
+
   it('should use default value when a transform fails', function () {
     const mapping = {
       target: {

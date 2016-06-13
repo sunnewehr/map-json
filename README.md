@@ -168,7 +168,7 @@ MapJson.map(
       { toUpperCase: [] },
       { append: ['_'] },
       // Parameters can also be referenced values
-      { append: [ { _source: 'fruits.apple.id' } ] }
+      { append: [{ _source: 'fruits.apple.id' }] }
     ]
   }
 },
@@ -285,6 +285,33 @@ MapJson.map(
 /*
 {
   fruitName: 'APPLE'
+}
+*/
+```
+
+### Transform each
+
+```javascript
+MapJson.map(
+// Source
+{
+  fruits: ['Apple', 'Banana']
+},
+// Mapping object
+{
+  id: {
+    _source: 'fruits',
+    _transformEach: { toUpperCase: [] }
+  },
+},
+// Transform / condition functions
+{
+  toUpperCase: value => value.toUpperCase()
+}
+);
+/*
+{
+  fruits: ['APPLE', 'BANANA']
 }
 */
 ```

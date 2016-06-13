@@ -56,6 +56,7 @@ class JsonMapper {
     const defaultValue = valueMapping._default;
     const sourceValues = this._resolveSource(valueMapping._source || valueMapping._sources);
     const transformFunctions = valueMapping._transform || valueMapping._transforms;
+    const transformEachFunction = valueMapping._transformEach;
 
     // Condition not met -> ignore transforms and return default immediately
     if (conditionFunctions && !this.transformUtil.checkCondition(sourceValues,
@@ -75,6 +76,10 @@ class JsonMapper {
     // If source value (or preprocessed value) is undefined, ignore transforms
     if (transformFunctions && !_.isUndefined(mappedValue)) {
       mappedValue = this.transformUtil.transformValue(mappedValue, transformFunctions);
+    }
+    if (transformEachFunction && _.isArray(mappedValue)) {
+      mappedValue = mappedValue.map(value =>
+        this.transformUtil.transformValue(value, transformEachFunction));
     }
     // Default value is returned when ->
     // 1) source value is undefined and no preprocess is defined
