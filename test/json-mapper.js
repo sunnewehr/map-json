@@ -89,10 +89,10 @@ describe('JsonMapper', function () {
   it('should map single object when wildcard returns one result', function () {
     const mapping = {
       target: {
-        _source: '*.*.0.number'
+        _source: 'key2.*.number'
       }
     };
-    expect(JsonMapper.map(testSource, mapping).target).to.deep.equal(1);
+    expect(JsonMapper.map(testSource, mapping).target).to.deep.equal(4);
   });
 
   it('should return undefined when wildcard returns no result', function () {

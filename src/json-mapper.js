@@ -103,9 +103,8 @@ class JsonMapper {
     // Use dotty.search if the path contains wildcards
     if (keyPath.indexOf('*') !== -1) {
       const result = dotty
-        .search(this.sourceObject, keyPath)
-        .filter(searchResult => searchResult !== undefined);
-      if (result.length === 0) return undefined;
+        .search(this.sourceObject, keyPath);
+      if (result.every(searchResult => searchResult === undefined)) return undefined;
       // If there is only a single result, return it directly
       if (result.length === 1) return result[0];
       return result;
